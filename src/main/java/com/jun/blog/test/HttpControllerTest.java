@@ -7,13 +7,13 @@ import org.springframework.web.bind.annotation.*;
 public class HttpControllerTest {
 
     @GetMapping("/http/get")
-    public String getTest(){
-        return "get 요청";
+    public String getTest(Member m){
+        return "get 요청"+m.getId()+","+m.getUsername()+","+m.getPassword()+","+m.getEmail();
     }
 
-    @PostMapping("/http/post")
-    public String postTest(){
-        return "post 요청";
+    @PostMapping("/http/post")//text/plain, application/json
+    public String postTest(@RequestBody String text){
+        return "post 요청"+text;
     }
 
     @PutMapping("/http/put")
