@@ -4,6 +4,10 @@ import com.jun.blog.model.RoleType;
 import com.jun.blog.model.User;
 import com.jun.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,9 +22,19 @@ public class DummyControllerTest {
     @Autowired // DI
     private UserRepository userRepository;
 
-    @GetMapping("/dummy/user")
+    //http://localhost:8000/blog/dummy/users
+    @GetMapping("/dummy/users")
     public List<User> list(){
         return userRepository.findAll();
+    }
+    //http://localhost:8000/blog/dummy/user
+    //한페이지당 2건의 데이터를 리턴
+    @GetMapping("/dummy/user")
+    public List<User> pageList(@PageableDefault(size = 2,sort = "id",direction = Sort.Direction.DESC)Pageable pageable)
+    {
+        Page<User> pagingUser = userRepository.findAll(pageable);
+        List<User> users = pagingUser.getContent();
+        return users;
     }
 
     //http://localhost:8000/blog/dummy/user/3(요청)
