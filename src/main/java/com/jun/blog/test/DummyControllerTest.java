@@ -11,6 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.EmptyStackException;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -25,7 +26,18 @@ public class DummyControllerTest {
     //id를 전달하면 해당 id에 대한 데이터가 있으면 update를 해주고
     //id를 전달하면 해당 id에 대한 데이터가 없으면 insert
     //email,password
-    @Transactional
+
+    @DeleteMapping("/dummy/user/{id}")
+    public String delete(@PathVariable int id){
+        try {
+            userRepository.deleteById(id);
+        }catch(EmptyStackException e){
+            return "삭제에 실패하였습니다. 해당 아이디는 존재하지 않습니다";
+        }
+        return "삭제되었습니다. id : "+id;
+    }
+
+    @Transactional // 함수 종료시에 자동 커밋
     @PutMapping("/dummy/user/{id}")
     public User updateUser(@PathVariable int id,@RequestBody User requestUser){
         System.out.println("id : "+id);
@@ -41,7 +53,7 @@ public class DummyControllerTest {
        //userRepository.save(user);
         
         //더티 체킹
-        return null;
+        return user;
 
     }
 
