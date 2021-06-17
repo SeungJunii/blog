@@ -17,3 +17,5 @@ let index={
     }
 
 }
+
+index.init();
