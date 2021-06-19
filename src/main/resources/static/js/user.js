@@ -3,9 +3,9 @@ let index= {
         $("#btn-save").on("click", () => {//function(){},()=>{}this를 바인딩하기 위해서!!
             this.save();
         });
-        $("#btn-login").on("click", () => {//function(){},()=>{}this를 바인딩하기 위해서!!
+        /*$("#btn-login").on("click", () => {//function(){},()=>{}this를 바인딩하기 위해서!!
             this.login();
-        });
+        });*/
     },
 
     save: function () {
@@ -23,7 +23,7 @@ let index= {
         $.ajax({
             //회원 가입 수행요청
             type: "post",
-            url: "/api/user",
+            url: "/auth/joinProc",
             data: JSON.stringify(data),//http body 데이터
             contentType: "application/json; charset=utf-8",//body데이터가 어떤 타입인지(MIME)
             dataType: "json"
@@ -36,8 +36,8 @@ let index= {
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
-    },
-    login: function () {
+    }
+    /*login: function () {
         // alert('user의 save함수 호출됨');
         let data = {
             username: $("#username").val(),
@@ -63,6 +63,6 @@ let index= {
             alert(JSON.stringify(error));
         });
 
-    }
+    }*/
 }
 index.init();
