@@ -1,6 +1,7 @@
 package com.jun.blog.config.auth;
 
 import com.jun.blog.model.User;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,9 +10,13 @@ import java.util.Collection;
 
 // 스프링 시큐리티가 로그인 요청을 가로채서 로그인을 진행하고 완료가 되면 UserDetails 타입의 오브젝트를
 //스프링 시큐리티의 고유한 세션저장소에 저장을 해준다.
+@Getter
 public class PrincipalDetail implements UserDetails {
     private User user; //콜포지션
 
+    public PrincipalDetail(User user){
+        this.user=user;
+    }
     @Override
     public String getPassword() {
         return user.getPassword();

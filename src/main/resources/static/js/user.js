@@ -36,7 +36,7 @@ let index= {
         }).fail(function (error) {
             alert(JSON.stringify(error));
         });
-    }
+    },
     /*login: function () {
         // alert('user의 save함수 호출됨');
         let data = {
