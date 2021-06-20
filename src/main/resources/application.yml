@@ -7,6 +7,7 @@ server:
       enabled: true
       force: true
 
+
 spring:
   mvc:
     view:
@@ -16,8 +17,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/blog?serverTimezone=Asia/Seoul
-    username: cos
-    password: cos1234
+    username: jun
+    password: jun1234
 
   jpa:
     open-in-view: true
@@ -33,3 +34,6 @@ spring:
   jackson:
     serialization:
       fail-on-empty-beans: false
+
+jun:
+  key: jun1234
