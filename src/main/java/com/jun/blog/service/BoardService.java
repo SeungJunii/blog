@@ -1,11 +1,11 @@
 package com.jun.blog.service;
 
+import com.jun.blog.dto.ReplySaveRequestDto;
 import com.jun.blog.model.Board;
-import com.jun.blog.model.Reply;
 import com.jun.blog.model.User;
 import com.jun.blog.repository.BoardRepository;
 import com.jun.blog.repository.ReplyRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,13 +13,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
+@RequiredArgsConstructor
 public class BoardService {
 
-    @Autowired
+    /*@Autowired
     private BoardRepository boardRepository;
 
     @Autowired
-    private ReplyRepository replyRepository;
+    private ReplyRepository replyRepository;*/
+
+    private final BoardRepository boardRepository;
+    private final ReplyRepository replyRepository;
+
+    /*public BoardService(BoardRepository bRepo, ReplyRepository rRepo) {
+        this.boardRepository = bRepo;
+        this.replyRepository = rRepo;
+    }*/
 
     @Transactional
     public void 글쓰기(Board board, User user) {//title,content
@@ -27,15 +36,16 @@ public class BoardService {
         board.setUser(user);
         boardRepository.save(board);
     }
+
     @Transactional(readOnly = true)
-    public Page<Board> 글목록(Pageable pageable){
+    public Page<Board> 글목록(Pageable pageable) {
         return boardRepository.findAll(pageable);
     }
 
     @Transactional(readOnly = true)
     public Board 글상세보기(int id) {
         return boardRepository.findById(id)
-                .orElseThrow(()->{
+                .orElseThrow(() -> {
                     return new IllegalArgumentException("글 상세보기실패 : 아이디를 찾을 수 없습니다.");
                 });
     }
@@ -57,15 +67,13 @@ public class BoardService {
     }
 
     @Transactional
-    public void 댓글쓰기(User user, int boardId, Reply requestReply) {
+    public void 댓글쓰기(ReplySaveRequestDto replySaveRequestDto) {
+        int result = replyRepository.mSave(replySaveRequestDto.getUserId(), replySaveRequestDto.getBoardId(), replySaveRequestDto.getContent());
+        System.out.println("BoardService : " + result);
+    }
 
-        Board board = boardRepository.findById(boardId).orElseThrow(()->{
-            return new IllegalArgumentException("댓글 쓰기 실패 : 게시글 id를 찾을 수 없습니다.");
-        }); // 영속화 완료;
-
-        requestReply.setUser(user);
-        requestReply.setBoard(board);
-
-        replyRepository.save(requestReply);
+    @Transactional
+    public void 댓글삭제(int replyId) {
+        replyRepository.deleteById(replyId);
     }
 }

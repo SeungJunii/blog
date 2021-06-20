@@ -1,9 +1,9 @@
 package com.jun.blog.controller.api;
 
 import com.jun.blog.config.auth.PrincipalDetail;
+import com.jun.blog.dto.ReplySaveRequestDto;
 import com.jun.blog.dto.ResponseDto;
 import com.jun.blog.model.Board;
-import com.jun.blog.model.Reply;
 import com.jun.blog.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,10 +35,17 @@ public class BoardApiController {
         return new ResponseDto<Integer>(HttpStatus.OK.value(),1);
     }
 
+    // 데이터 받을 때 컨트롤러에서 dto를 만들어서 받는게 좋다.
+    // dto 사용하지 않은 이유는!!
     @PostMapping("/api/board/{boardId}/reply")
-    public ResponseDto<Integer> replySave(@PathVariable int boardId, @RequestBody Reply reply, @AuthenticationPrincipal PrincipalDetail principal) {
+    public ResponseDto<Integer> replySave(@RequestBody ReplySaveRequestDto replySaveRequestDto) {
+        boardService.댓글쓰기(replySaveRequestDto);
+        return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
+    }
 
-        boardService.댓글쓰기(principal.getUser(), boardId, reply);
+    @DeleteMapping("/api/board/{boardId}/reply/{replyId}")
+    public ResponseDto<Integer> replyDelete(@PathVariable int replyId) {
+        boardService.댓글삭제(replyId);
         return new ResponseDto<Integer>(HttpStatus.OK.value(), 1);
     }
 

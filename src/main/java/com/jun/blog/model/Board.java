@@ -35,7 +35,7 @@ public class Board {
     @JoinColumn(name = "userId")
     private User user;//DB는 오브젝트를 저장할 수 없다.FK, 자바는 오브젝트를 저장할 수 있다.
 
-    @OneToMany(mappedBy = "board" ,fetch = FetchType.EAGER)//mappedBy 연관관계의 주인관계X
+    @OneToMany(mappedBy = "board" ,fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)//mappedBy 연관관계의 주인관계X
     //FetchType.LAZY= 필요할 경우 테이블에 있는 attribute를 가져온다. -fetch 전략
     @JsonIgnoreProperties({"board"})
     @OrderBy("id desc")
