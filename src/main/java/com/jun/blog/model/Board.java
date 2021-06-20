@@ -1,5 +1,6 @@
 package com.jun.blog.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -36,7 +37,9 @@ public class Board {
 
     @OneToMany(mappedBy = "board" ,fetch = FetchType.EAGER)//mappedBy 연관관계의 주인관계X
     //FetchType.LAZY= 필요할 경우 테이블에 있는 attribute를 가져온다. -fetch 전략
-    private List<Reply> reply;
+    @JsonIgnoreProperties({"board"})
+    @OrderBy("id desc")
+    private List<Reply> replys;
 
     @CreationTimestamp
     private Timestamp createDate;

@@ -1,8 +1,10 @@
 package com.jun.blog.service;
 
 import com.jun.blog.model.Board;
+import com.jun.blog.model.Reply;
 import com.jun.blog.model.User;
 import com.jun.blog.repository.BoardRepository;
+import com.jun.blog.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +18,8 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
 
-
+    @Autowired
+    private ReplyRepository replyRepository;
 
     @Transactional
     public void 글쓰기(Board board, User user) {//title,content
@@ -51,5 +54,18 @@ public class BoardService {
         board.setTitle(requestBoard.getTitle());
         board.setContent(requestBoard.getContent());
         //해당 함수로 종료시(Service가 종료될 때) 트랜잭션 종료, 이때 더티체킹- 자동업데이트됨 DB flush
+    }
+
+    @Transactional
+    public void 댓글쓰기(User user, int boardId, Reply requestReply) {
+
+        Board board = boardRepository.findById(boardId).orElseThrow(()->{
+            return new IllegalArgumentException("댓글 쓰기 실패 : 게시글 id를 찾을 수 없습니다.");
+        }); // 영속화 완료;
+
+        requestReply.setUser(user);
+        requestReply.setBoard(board);
+
+        replyRepository.save(requestReply);
     }
 }
